@@ -193,6 +193,24 @@ function viewPrompts() {
         });
     }
 
+    //VIEW ROLE
+    function viewRole() {
+        console.log("Selecting all departments...\n");
+        connection.query("SELECT * FROM employee_role", function (err, res) {
+            if (err) throw err;
+            console.table(res);
+        });
+    }
+
+    //VIEW EMPLOYEE
+    function viewEmployee() {
+        console.log("Selecting all departments...\n");
+        connection.query("SELECT * FROM employee", function (err, res) {
+            if (err) throw err;
+            console.table(res);
+        });
+    }
+
 
 
 
