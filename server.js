@@ -1,9 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var consoleTable = require("console.table");
-//const Department = require("/js/Department.js");
-//const Employee = require("/js/Employee.js");
-//const Role = require("/js/Role.js");
 require("dotenv").config();
 
 var connection = mysql.createConnection({
@@ -22,6 +19,7 @@ connection.connect(function (err) {
     console.log("connected as id " + connection.threadId);
     start();
 });
+
 //STARTING PROMPTS
 function start() {
     inquirer
@@ -82,6 +80,7 @@ function addPrompts() {
 
 
                 console.log(query.sql);
+                start()
             });
     }
 
@@ -117,6 +116,7 @@ function addPrompts() {
 
 
                 console.log(query.sql);
+                start()
             });
     }
 
@@ -157,6 +157,7 @@ function addPrompts() {
 
 
                 console.log(query.sql);
+                start()
             });
     }
 
@@ -190,6 +191,7 @@ function viewPrompts() {
         connection.query("SELECT * FROM department", function (err, res) {
             if (err) throw err;
             console.table(res);
+            start()
         });
     }
 
@@ -199,6 +201,7 @@ function viewPrompts() {
         connection.query("SELECT * FROM employee_role", function (err, res) {
             if (err) throw err;
             console.table(res);
+            start()
         });
     }
 
@@ -208,6 +211,7 @@ function viewPrompts() {
         connection.query("SELECT * FROM employee", function (err, res) {
             if (err) throw err;
             console.table(res);
+            start()
         });
     }
 
@@ -219,21 +223,66 @@ function viewPrompts() {
 
 
 //UPDATE
-/*function updatePrompts() {
-    inquirer
-        .prompt({
-            type: 'list',
-            name: 'action',
-            message: 'Update Department? Update Role? Update Employee?',
-            choices: ['Update Departments', 'Update Roles', 'Update Employees'],
-        }).then((answers) => {
-            if (answers.action === 'Update Departments') {
-                UpdateDepartment();
-            } else if (answers.action === 'Update Roles') {
-                UpdateRole();
-            } else {
-                UpdateEmployee();
-            }
 
-        })
-};*/
+
+function updatePrompts() {
+    let sql = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.id AS "
+    role_id "
+    FROM employee, employee_role, department WHERE department.id = employee_role.department_id AND employee_role.id = employee.role_id`;
+    connection.query(sql, (error, response) => {
+        if (error) throw error;
+        //console.log(response);
+        const queryResponse = response;
+        let employeeNamesArray = [];
+        response.forEach((response) => {
+            employeeNamesArray.push(`${response.first_name} ` + ` ${response.last_name}`);
+        });
+
+        let sql1 = "SELECT * FROM employee_role;"
+        connection.query(sql1, (error, response) => {
+            if (error) throw error;
+            console.log(response);
+            let employeeRoleArray = [];
+            response.forEach((response) => {
+                employeeRoleArray.push(`${response.id}`);
+            });
+
+            inquirer
+                .prompt([{
+                    type: 'list',
+                    name: 'action',
+                    message: 'Update Which Employee?',
+                    choices: employeeNamesArray,
+                }, {
+                    type: 'list',
+                    name: 'action1',
+                    message: "Update Employee with which Role ID?",
+                    choices: employeeRoleArray,
+                }])
+
+                .then((response) => {
+                    console.log(response.id);
+                    var newRole = response.action1;
+                    var chosenEmployee = response.action;
+
+                    connection.query("UPDATE employee SET ? WHERE %?%"),
+                        [{
+                                role_id: newRole
+                            },
+                            {
+                                first_name: chosenEmployee
+                            }
+                        ],
+                        function (err, res) {
+                            if (err) throw err;
+                            console.log(res.affectedRows + " role updated!\n");
+
+
+                        }
+
+                })
+
+        });
+    });
+
+};
