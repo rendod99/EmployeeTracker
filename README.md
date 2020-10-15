@@ -49,3 +49,8 @@ rendod99@gmail.com
 
 - gitHub repostory
   https://github.com/rendod99/EmployeeTracker
+
+- Demo Video
+  https://drive.google.com/file/d/1taeJBLqdlQueZ7ybiyK-LAz-J5Hswayy/view?usp=sharing
+
+<img width="1035" alt="Screen Shot 2020-10-14 at 11 19 12 PM" src="https://user-images.githubusercontent.com/66277385/96076778-c390b280-0e73-11eb-9c31-ddf88a0dc9da.png">

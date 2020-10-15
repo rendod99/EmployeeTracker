@@ -70,7 +70,7 @@ function addPrompts() {
 
                 var query = connection.query(
                     "INSERT INTO department SET ?", {
-                        name: response.name,
+                        department_name: response.name,
                     },
                     function (err, res) {
                         if (err) throw err;
@@ -137,10 +137,9 @@ function addPrompts() {
                     message: 'Last Name?',
                     name: 'lastName'
                 }, {
-                    type: 'list',
-                    name: 'roleId',
+                    type: 'input',
                     message: "Add Employee with which title ID?",
-                    choices: ["1", "2", "3", "4", "5"],
+                    name: 'roleId'
                 }, {
                     type: 'input',
                     message: 'Manager ID?',
@@ -150,7 +149,7 @@ function addPrompts() {
                 .then((response) => {
 
                     var query = connection.query(
-                        "INSERT INTO employee,employee_role SET ?", {
+                        "INSERT INTO employee SET ?", {
                             first_name: response.firstName,
                             last_name: response.lastName,
                             role_id: response.roleId,
